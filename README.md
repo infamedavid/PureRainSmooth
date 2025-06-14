@@ -6,7 +6,7 @@ El **Rain Filter** [**Rain Filter**](https://www.dropbox.com/scl/fi/tizbmmv92zbh
 
 ---
 
-## Descripción matemática mínima
+## Descripción:
 
 1. **Medida local de relieve**
 
