@@ -61,7 +61,7 @@ El [**Rain Filter**](https://www.dropbox.com/scl/fi/tizbmmv92zbhrmsgulee6/Rain-F
 
 ## Discusión
 
-* Los primeros pasos apenas alteran la malla; al acumular iteraciones y con la amplificación exponencial, el relieve converge rápidamente hacia la planitud.
+* Los primeros pasos apenas alteran la malla; al acumular iteraciones y con la amplificación exponencial, el relieve converge rápidamente hacia la **"Forma primordial"**.
 * La **aleatoriedad** de las gotas crea microvariaciones que no produce un filtro determinista, proporcionando un aspecto más *natural*.
 * Posibles mejoras productivas:
 
