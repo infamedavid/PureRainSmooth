@@ -100,4 +100,4 @@ Esto abre la puerta a experimentos análogos en audio DSP o texturas procedural
 
 * Rodríguez, D. (2025). *Rain Filter* (concepto original).
 * Taubin, G. (1995). “A signal processing approach to fair surface design.” *SIGGRAPH*.
-* **El Mar**, experiencia observacional que inspiró la metáfora de la lluvia calmando las olas.
+* **El Mar**, que fue mi inspiracion i principla refencia.
