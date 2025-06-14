@@ -76,11 +76,8 @@ El [**Rain Filter**](https://www.dropbox.com/scl/fi/tizbmmv92zbhrmsgulee6/Rain-F
 1. **Implementación en audio:** se explora un prototipo en *Pure Data* donde el ruido se inyecta como gotas antifase condicionadas por la forma de la señal.
 2. **Mejoras en Blender:**
 
-   * Curvaturas más precisas, sin comprometer la filosofía.
-   * Conversión a modificador procedural animable.
+   * Curvaturas más precisas, sin comprometer la filosofía (curvatura laplacian).
    * Soporte de mapas de peso para modular espacialmente la lluvia.
-
-Estas direcciones permitirán que el Rain Filter evolucione de prueba algorítmica a herramienta expresiva tanto en gráficos como en sonido.
 
 ---
 
@@ -92,7 +89,7 @@ El **Rain Filter** demuestra que un filtro puede surgir del **ruido mismo cuan
 * Sin kernels fijos,
 * Únicamente ruido antifase y curvatura local.
 
-Esto abre la puerta a experimentos análogos en audio DSP o texturas procedurales, donde la dinámica emergente y la fase relativa del ruido podrían desempeñar el mismo papel.
+Estas direcciones permitirán que el **Rain Filter** evolucione de prueba algorítmica a herramienta expresiva tanto en gráficos como en sonido.
 
 ---
 
@@ -100,4 +97,4 @@ Esto abre la puerta a experimentos análogos en audio DSP o texturas procedural
 
 * Rodríguez, D. (2025). *Rain Filter* (concepto original).
 * Taubin, G. (1995). “A signal processing approach to fair surface design.” *SIGGRAPH*.
-* **El Mar**, que fue mi inspiracion i principla refencia.
+* **El Mar**, que fue mi inspiracion y principla refencia.
