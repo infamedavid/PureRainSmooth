@@ -19,28 +19,28 @@ from bpy.props import FloatProperty, IntProperty, PointerProperty, BoolProperty
 # --------------------------------------------------------------------
 class PureRainProps(bpy.types.PropertyGroup):
     intensity: FloatProperty(
-        name="Intensidad base",
-        default=0.3, min=0.0, max=5.0,
+        name="Intensity",
+        default=0.5, min=0.0, max=5.0,
         description="Magnitud inicial del desplazamiento por gota"
     )
     density: FloatProperty(
-        name="Densidad",
+        name="Density",
         default=0.7, min=0.0, max=1.0,
         subtype='PERCENTAGE',
         description="Probabilidad de que un vértice reciba una gota en cada pasada"
     )
     iterations: IntProperty(
-        name="Iteraciones",
+        name="Iterations",
         default=30, min=1, max=500,
         description="Número de pasadas del algoritmo"
     )
     growth_ui: FloatProperty(
-        name="Intensificación",
+        name="Exponential Factor",
         default=0.5, min=0.0, max=1.0,
         description="Controla cuánto crece el efecto con cada iteración"
     )
     tangential_passes: BoolProperty(
-        name="Incluir coordenadas tangenciales",
+        name="Tangent Rain",
         default=False,
         description="Aplica el suavizado también en direcciones X e Y relativas a la normal"
     )
@@ -100,7 +100,7 @@ class RAIN_OT_pure_smooth(bpy.types.Operator):
         verts_sel = [v for v in bm.verts if v.select]
 
         if not verts_sel:
-            self.report({'WARNING'}, "¡No hay vértices seleccionados!")
+            self.report({'WARNING'}, "¡No Selected Verts!")
             return {'CANCELLED'}
 
         growth = 1.0 + self.growth_ui * 0.3
@@ -147,9 +147,9 @@ class VIEW3D_PT_pure_rain_smooth(bpy.types.Panel):
         col.prop(props, "density", slider=True)
         col.prop(props, "iterations")
         col.prop(props, "growth_ui", slider=True)
-        col.prop(props, "tangential_passes")
+        col.prop(props, "tangential_passes",toggle=True)
         col.separator()
-        op = col.operator("mesh.pure_rain_smooth", text="Aplicar Pure Rain")
+        op = col.operator("mesh.pure_rain_smooth", text="Rain")
         op.intensity = props.intensity
         op.density = props.density
         op.iterations = props.iterations
