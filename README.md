@@ -2,7 +2,7 @@
 
 ## Introducción
 
-El [**Rain Filter**](https://www.dropbox.com/scl/fi/tizbmmv92zbhrmsgulee6/Rain-Filter.pdf?rlkey=rl3la5kkztk7pr1q5nmgd7rbz&dl=0) propone un enfoque de suavizado en el que **el ruido aleatorio actúa como filtro emergente**. A diferencia de métodos deterministas —por ejemplo, un filtro Laplaciano clásico—, aquí se lanzan *gotas* (perturbaciones estocásticas) sobre la malla y **actuando de forma inversa a la fase del  vector normal**: las crestas se erosionan y los valles se rellenan. El resultado final es un suavizado global, pero lo interesante del método reside en **los pasos intermedios y su aleatoriedad controlada**.
+El [**Rain Filter**](https://github.com/infamedavid/NoiseFilter/tree/main) propone un enfoque de suavizado en el que **el ruido aleatorio actúa como filtro emergente**. A diferencia de métodos deterministas —por ejemplo, un filtro Laplaciano clásico—, aquí se lanzan *gotas* (perturbaciones estocásticas) sobre la malla y **actuando de forma inversa a la fase del  vector normal**: las crestas se erosionan y los valles se rellenan. El resultado final es un suavizado global, pero lo interesante del método reside en **los pasos intermedios y su aleatoriedad controlada**.
 
 ---
 
