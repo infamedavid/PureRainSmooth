@@ -1,100 +1,84 @@
-# Suavizado de mallas poligonales utilizando el algoritmo **Rain Filter**
+# Pure Rain Smooth – Rain Filter on Meshes
 
-## Introducción
-
-El [**Rain Filter**](https://github.com/infamedavid/NoiseFilter/tree/main) propone un enfoque de suavizado en el que **el ruido aleatorio actúa como filtro emergente**. A diferencia de métodos deterministas —por ejemplo, un filtro Laplaciano clásico—, aquí se lanzan *gotas* (perturbaciones estocásticas) sobre la malla y **actuando de forma inversa a la fase del  vector normal**: las crestas se erosionan y los valles se rellenan. El resultado final es un suavizado global, pero lo interesante del método reside en **los pasos intermedios y su aleatoriedad controlada**.
-
----
-
-## Descripción:
-
-1. **Medida local de relieve**
-
-   Para un vértice $v$ con vecinos $\{v_i\}$:
-
-   $\mathbf{c}=\frac{1}{N}\sum_i v_i, \qquad \mathbf{d}=v-\mathbf{c}$
-
-   El escalar de curvatura proyectada es:
-
-   $\kappa = \mathbf{d}\cdot\mathbf{n}$
-
-   donde $\mathbf{n}$ es la **normal local**.
-
-2. **Generación de la gota**
-
-   Se elige un vector ruido unitario $\mathbf{r}\in[-1,1]^3$ (distribución uniforme).
-
-3. **Condición de antifase**
-
-   La gota se aplica **solo si**:
-
-   $\kappa\,(\mathbf{r}\cdot\mathbf{n}) < 0$
-
-   de modo que siempre tiende a *aplanar* la superficie.
-
-4. **Desplazamiento**
-
-   $\Delta\mathbf{v}=\alpha\,|\kappa|\,\mathbf{r}$
-
-   donde $\alpha$ es la intensidad base, amplificada exponencialmente por iteración:
-
-   $\alpha_i = \alpha_0\,\text{growth}^i$
-
-   > **Nota:** Esta amplificación exponencial **no forma parte del concepto original del Rain Filter**, pero resulta necesaria en aplicaciones sobre mallas tridimensionales, donde muchas regiones presentan curvaturas pequeñas. Sin esta intensificación progresiva, el filtro no tendría efecto apreciable en esas áreas. En contexto DSP, un mecanismo similar podría aplicarse, pero debe manejarse con cuidado: **una ganancia exponencial puede provocar artefactos o explosiones sónicas**.
-
-5. **Iteración**
-
-   El proceso se repite varias pasadas; el suavizado emerge de la acumulación.
+> **Abstract**  
+> *Pure Rain Smooth* is a stochastic mesh–smoothing add‑on for Blender.  It applies noise droplets **always pushing inward**—never zero, never outward—exactly as prescribed by the original [Rain Filter](https://github.com/infamedavid/NoiseFilter).  Curvature‐conditioned magnitude and antifase direction yield an emergent low‑pass effect without explicit convolutions.  Real‑time burst mode and tangential options are extra sprinkles, not core doctrine.
 
 ---
 
-## Implementación en Blender (**Pure Rain Smooth 1.2.1**)
+## Introduction
 
-* **Dirección local:** se usa la normal individual de cada vértice.
-* **Pasadas tangenciales (opcionales):** dos direcciones ortogonales locales para un efecto más isotrópico.
-* **Amplificación exponencial:** controla la velocidad de convergencia (`growth ∈ [1 – 1.3]`).
-* **Clamp de seguridad:** limita cada desplazamiento a 0.05 BU, evitando explosiones geométricas.
-
-> *Existen métodos más eficientes y teóricamente robustos para suavizar mallas (p. ej. Laplaciano discreto completo o Taubin smooth). Aquí se prioriza la **fidelidad conceptual** al modelo Rain Filter sobre la optimización, a modo de prueba de concepto.*
+The [**Rain Filter**](https://github.com/infamedavid/NoiseFilter/tree/main) proposes a smoothing approach in which **random noise acts as an emergent filter**.  Unlike deterministic methods—e.g. classical Laplacian—this model drops *stochastic perturbations* onto the mesh and applies them **in antifase with the vertex normal**: ridges erode, valleys fill.  The final result is global smoothing, yet the magic lies in **the intermediate steps and their controlled randomness**.
 
 ---
 
-## Discusión
+## Core Doctrine – features that are *non‑negotiable*
 
-* Los primeros pasos apenas alteran la malla; al acumular iteraciones y con la amplificación exponencial, el relieve converge rápidamente hacia la **"Forma primordial"**.
-* La **aleatoriedad** de las gotas crea microvariaciones que no produce un filtro determinista, proporcionando un aspecto más *natural*.
-* Posibles mejoras productivas:
+| Principle | Implementation in v1.5.1 |
+|-----------|--------------------------|
+| **Antifase push** | Displacement direction is always `‑normal` (or tangents when enabled). |
+| **Droplets never zero** | Every selected vertex has a non‑zero chance (`density`) each sub‑pass; magnitude `random(0,1)` ensures *some* push. |
+| **Curvature‑weighted magnitude** | `logCoeff = log(1+steepness·κ)/log(1+steepness)` (κ ≥ 0). Peaks ≈ 1, planes ≈ ½, valleys > 0. |
+| **No deterministic kernels** | Smoothing emerges from repeated noise impacts—no Laplacian matrix, no explicit diffusion. |
 
-  1. Sustituir la curvatura proyectada por un Laplaciano completo.
-  2. Implementar el proceso como **modificador no destructivo**.
-  3. Controlar la lluvia mediante **mapas de peso** o texturas.
+### Optional / fun extras (can be disabled)
 
----
-
-## Próximos pasos
-
-1. **Implementación en audio:** se explora un prototipo en *Pure Data* donde el ruido se inyecta como gotas antifase condicionadas por la forma de la señal.
-2. **Mejoras en Blender:**
-
-   * Curvaturas más precisas, sin comprometer la filosofía (curvatura laplacian).
-   * Soporte de mapas de peso para modular espacialmente la lluvia.
+| Extra | Purpose |
+|-------|---------|
+| **Tangential Passes** | Hits along two orthogonal directions for isotropic feel. |
+| **Interleaved Tangents** | Shuffle order Normal → T1 → T2 within each iteration (acts like a "detangler"). |
+| **Burst Rain Mode** | Timer‑driven loop; click **Play** for continuous drizzle, **Pause** to stop. |
 
 ---
 
-## Conclusiones
+## Algorithm
 
-El **Rain Filter** demuestra que un filtro puede surgir del **ruido mismo cuando se condiciona por la forma**. El addon **Pure Rain Smooth** implementa fielmente este principio para mallas poligonales:
+1. **Local relief**  κ = max((v − centroid) · n, 0)  
+2. **Log gain**  `logCoeff = log(1 + steepness · κ) / log(1 + steepness)`  
+3. **Drop magnitude**  `|Δ| = intensity · rand(0,1) · logCoeff`  
+4. **Direction**  `–n` or tangents (optional).  
+5. **Clamp**  `|Δ| ≤ maxDisp`  
+6. **Iterate**  Fixed **Iterations** per click, or endless timer in **Burst** mode.
 
-* Sin convoluciones explícitas,
-* Sin kernels fijos,
-* Únicamente ruido antifase y curvatura local.
-
-Estas direcciones permitirán que el **Rain Filter** evolucione de prueba algorítmica a herramienta expresiva tanto en gráficos como en sonido.
+> **Note:** Exponential growth from early prototypes has been removed; droplets now rely purely on curvature‑log gain—consistent with the original paper.
 
 ---
 
-## Referencias breves
+## Parameters
 
-* Rodríguez, D. (2025). *Rain Filter* (concepto original).
-* Taubin, G. (1995). “A signal processing approach to fair surface design.” *SIGGRAPH*.
-* **El Mar**, que fue mi inspiracion y principla refencia.
+| UI Control | Range | Core / Extra | Notes |
+|------------|-------|--------------|-------|
+| Intensity | 0 – 5 | Core | Global strength multiplier. |
+| Density | 0 – 1 | Core | Probability each vertex is hit per sub‑pass. |
+| Iterations | 1 – 500 | Core | Hidden in Burst mode. |
+| Steepness | 0.1 – 10 | Core | 0.1 ≈ linear, 10 very logarithmic. |
+| Max Disp | 0.001 – 1 BU | Core | Safety clamp per droplet. |
+| Tangent Rain | bool | Extra | Add two orthogonals. |
+| Interleaved Tangents | bool | Extra | Cycle N→T1→T2 every loop. |
+| Interval (s) | 0.01 – 5 | Extra | Timer period in Burst mode. |
+
+---
+
+## Usage
+
+1. **Edit Mode** → select the vertices you want to tame.  
+2. Set sliders (`Intensity`, `Density`, etc.).  
+3. • One‑shot: press **Rain**.  
+   • Continuous: open *Burst Rain Mode*, set *Interval*, press **Play** (stop with **Pause**).  
+4. Optionally enable **Tangential Passes** or **Interleaved** for a rounder wash.
+
+---
+
+## Roadmap
+
+* Weight‑map modulation (paint where it rains harder).  
+* Shape‑key morph sequence to animate the storm.  
+* Optional Laplacian relief *measurement* (still emergent in action).  
+* Audio port for the same concept in DSP.
+
+---
+
+## Credits
+
+*Algorithm & concept* — **David Rodríguez**  
+**El Mar, que fue mi inspiracion y refencia.**
+
