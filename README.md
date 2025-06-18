@@ -1,7 +1,7 @@
 # Pure Rain Smooth – Rain Filter on Meshes
 
 > **Abstract**  
-> *Pure Rain Smooth* is a stochastic mesh–smoothing add‑on for Blender.  It applies noise droplets **always pushing inward**—never zero, never outward—exactly as prescribed by the original [Rain Filter](https://github.com/infamedavid/NoiseFilter).  Curvature‐conditioned magnitude and antifase direction yield an emergent low‑pass effect without explicit convolutions.  Real‑time burst mode and tangential options are extra sprinkles, not core doctrine.
+> *Pure Rain Smooth* is a stochastic mesh–smoothing add‑on for Blender.  It applies noise droplets **always pushing inward**—never zero, never outward—exactly as prescribed by the original [Rain Filter](https://github.com/infamedavid/NoiseFilter).  Curvature‐conditioned magnitude and antifase direction yield an emergent "low‑pass" - like effect without explicit convolutions.
 
 ---
 
@@ -11,11 +11,11 @@ The [**Rain Filter**](https://github.com/infamedavid/NoiseFilter/tree/main) pro
 
 ---
 
-## Core Doctrine – features that are *non‑negotiable*
+## Core Doctrine
 
 | Principle | Implementation in v1.5.1 |
 |-----------|--------------------------|
-| **Antifase push** | Displacement direction is always `‑normal` (or tangents when enabled). |
+| **Antifase push** | Displacement direction is always inverse to the phase (in meshes it is asume as unipolar signal)
 | **Droplets never zero** | Every selected vertex has a non‑zero chance (`density`) each sub‑pass; magnitude `random(0,1)` ensures *some* push. |
 | **Curvature‑weighted magnitude** | `logCoeff = log(1+steepness·κ)/log(1+steepness)` (κ ≥ 0). Peaks ≈ 1, planes ≈ ½, valleys > 0. |
 | **No deterministic kernels** | Smoothing emerges from repeated noise impacts—no Laplacian matrix, no explicit diffusion. |
@@ -68,9 +68,7 @@ The [**Rain Filter**](https://github.com/infamedavid/NoiseFilter/tree/main) pro
 
 ## Roadmap
 
-* Weight‑map modulation (paint where it rains harder).  
-* Shape‑key morph sequence to animate the storm.  
-* Optional Laplacian relief *measurement* (still emergent in action).  
+* Weight‑map modulation (paint where it rains harder).   
 * Audio port for the same concept in DSP.
 
 ---
