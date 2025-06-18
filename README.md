@@ -1,7 +1,7 @@
 # Pure Rain Smooth – Rain Filter on Meshes
 
 > **Abstract**  
-> *Pure Rain Smooth* is a stochastic mesh–smoothing add‑on for Blender.  It applies noise droplets **always pushing inward**—never zero, never outward—exactly as prescribed by the original [Rain Filter](https://github.com/infamedavid/NoiseFilter).  Curvature‐conditioned magnitude and antifase direction yield an emergent "low‑pass" - like effect without explicit convolutions.
+> *Pure Rain Smooth* is a stochastic mesh–smoothing add‑on for Blender.  It applies noise droplets **always pushing inward**—never zero, never outward—exactly as prescribed by the Rain Filter.  Curvature‐conditioned magnitude and antifase direction yield an emergent "low‑pass" - like effect without explicit convolutions.
 
 ---
 
