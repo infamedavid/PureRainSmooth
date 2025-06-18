@@ -39,8 +39,6 @@ The [**Rain Filter**](https://github.com/infamedavid/NoiseFilter/tree/main) pro
 5. **Clamp**  `|Δ| ≤ maxDisp`  
 6. **Iterate**  Fixed **Iterations** per click, or endless timer in **Burst** mode.
 
-> **Note:** Exponential growth from early prototypes has been removed; droplets now rely purely on curvature‑log gain—consistent with the original paper.
-
 ---
 
 ## Parameters
