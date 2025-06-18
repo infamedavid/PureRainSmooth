@@ -7,7 +7,7 @@
 
 ## Introduction
 
-The [**Rain Filter**](https://github.com/infamedavid/NoiseFilter/tree/main) proposes a smoothing approach in which **random noise acts as an emergent filter**.  Unlike deterministic methods—e.g. classical Laplacian—this model drops *stochastic perturbations* onto the mesh and applies them **in antifase with the vertex normal**: ridges erode, valleys fill.  The final result is global smoothing, yet the magic lies in **the intermediate steps and their controlled randomness**.
+The [**Rain Filter**](https://github.com/infamedavid/NoiseFilter/tree/main) proposes a smoothing approach in which **random noise acts as an emergent filter**.  Unlike deterministic methods—e.g. classical Laplacian—this model drops *stochastic perturbations* onto the mesh and applies them **in antifase with the vertex normal**. The final result is global smoothing, yet the magic lies in **the intermediate steps and their controlled randomness**.
 
 ---
 
