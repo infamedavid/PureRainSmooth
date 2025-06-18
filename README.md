@@ -20,7 +20,7 @@ The [**Rain Filter**](https://github.com/infamedavid/NoiseFilter/tree/main) pro
 | **Curvature‑weighted magnitude** | `logCoeff = log(1+steepness·κ)/log(1+steepness)` (κ ≥ 0). Peaks ≈ 1, planes ≈ ½, valleys > 0. |
 | **No deterministic kernels** | Smoothing emerges from repeated noise impacts—no Laplacian matrix, no explicit diffusion. |
 
-### Optional / fun extras (can be disabled)
+### Optional 
 
 | Extra | Purpose |
 |-------|---------|
